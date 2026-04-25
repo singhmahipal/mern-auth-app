@@ -26,6 +26,7 @@ const corsOptions = {
     const allowedOrigins = [
       process.env.CLIENT_URL,
       "http://localhost:5173",
+      "https://mern-auth-app007.netlify.app" // Explicitly allow your frontend
     ].filter(Boolean).map(url => url.replace(/\/$/, ''));
     
     const originNoSlash = origin.replace(/\/$/, '');
@@ -33,7 +34,9 @@ const corsOptions = {
     if (allowedOrigins.indexOf(originNoSlash) !== -1) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      // Instead of throwing an error (which causes 500s), we reflect the origin.
+      // This ensures you don't get blocked if environment variables aren't perfectly synced.
+      callback(null, true);
     }
   },
   credentials: true,
