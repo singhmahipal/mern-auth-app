@@ -17,12 +17,30 @@ const app = express();
 // --------------- Middleware ---------------
 
 // Enable CORS for the frontend origin
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Build list of allowed origins and remove any trailing slashes
+    const allowedOrigins = [
+      process.env.CLIENT_URL,
+      "http://localhost:5173",
+    ].filter(Boolean).map(url => url.replace(/\/$/, ''));
+    
+    const originNoSlash = origin.replace(/\/$/, '');
+
+    if (allowedOrigins.indexOf(originNoSlash) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 
 // Parse JSON request bodies
 app.use(express.json());

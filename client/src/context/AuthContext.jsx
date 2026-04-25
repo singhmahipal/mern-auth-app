@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem("token");
       if (token) {
         try {
-          const { data } = await API.get("/auth/profile");
+          const { data } = await API.get("/api/auth/profile");
           setUser(data.user);
         } catch {
           // Token is invalid or expired — clean up
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const { data } = await API.post("/auth/login", { email, password });
+    const { data } = await API.post("/api/auth/login", { email, password });
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
     setUser(data.user);
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signup = async (name, email, password) => {
-    const { data } = await API.post("/auth/signup", { name, email, password });
+    const { data } = await API.post("/api/auth/signup", { name, email, password });
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
     setUser(data.user);

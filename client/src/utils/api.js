@@ -9,7 +9,7 @@ import axios from "axios";
  * In production, set VITE_API_URL to your deployed backend URL.
  */
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "/api",
+  baseURL: import.meta.env.VITE_API_URL || "",
 });
 
 // Attach JWT token to every request if it exists in localStorage
